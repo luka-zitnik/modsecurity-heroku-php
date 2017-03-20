@@ -8,7 +8,9 @@ set -eu
 
 OUT_PREFIX=$1
 
-source $(dirname $BASH_SOURCE)/_util/include/manifest.sh
+util_dir=$(dirname $BASH_SOURCE)/../../heroku-buildpack-php/support/build/_util/
+
+source ${util_dir}/include/manifest.sh
 
 dep_formula=${0#$WORKSPACE_DIR/}
 dep_name=$(basename $BASH_SOURCE)
@@ -69,6 +71,6 @@ cat > ${OUT_PREFIX}/bin/profile.apache2.sh <<'EOF'
 export PATH="$HOME/.heroku/php/bin:$HOME/.heroku/php/sbin:$PATH"
 EOF
 
-python $(dirname $BASH_SOURCE)/_util/include/manifest.py "heroku-sys-webserver" "heroku-sys/${dep_name}" "$dep_version" "${dep_formula}.tar.gz" "$MANIFEST_REQUIRE" "$MANIFEST_CONFLICT" "$MANIFEST_REPLACE" "$MANIFEST_EXTRA" > $dep_manifest
+python ${util_dir}/include/manifest.py "heroku-sys-webserver" "heroku-sys/${dep_name}" "$dep_version" "${dep_formula}.tar.gz" "$MANIFEST_REQUIRE" "$MANIFEST_CONFLICT" "$MANIFEST_REPLACE" "$MANIFEST_EXTRA" > $dep_manifest
 
 print_or_export_manifest_cmd "$(generate_manifest_cmd "$dep_manifest")"
