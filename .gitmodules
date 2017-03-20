@@ -1,0 +1,4 @@
+[submodule "heroku-buildpack-php"]
+	path = heroku-buildpack-php
+	url = https://github.com/heroku/heroku-buildpack-php.git
+	branch = master

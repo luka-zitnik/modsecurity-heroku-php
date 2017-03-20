@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+echo "-----> Building modsecurity-2.9.1..."
+
+curl -L https://www.modsecurity.org/tarball/2.9.1/modsecurity-2.9.1.tar.gz | tar xz
+
+pushd modsecurity-2.9.1
+./autogen.sh
+./configure \
+    --with-apr=${OUT_PREFIX}/bin/apr-1-config \
+    --with-apu=${OUT_PREFIX}/bin/apu-1-config \
+    --with-apxs=${OUT_PREFIX}/bin/apxs \
+    --prefix=${OUT_PREFIX}
+make
+make test
+make install
+popd
