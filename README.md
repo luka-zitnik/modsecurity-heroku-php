@@ -30,3 +30,21 @@ DirectoryIndex index.php index.html index.htm
 SecDebugLog /tmp/heroku.modsecurity_debug.${PORT}.log
 SecDebugLogLevel 9
 ```
+
+### Originating IP Address
+
+The [`REMOTE_ADDR`](https://github.com/SpiderLabs/ModSecurity/wiki/Reference-Manual#REMOTE_ADDR) variable holds the IP address of an AWS proxy server. You should read your client's IP from the `REQUEST_HEADERS:X-Forwarded-For` variable instead. That is the right-most IP from the value, as it's [the most reliable](https://en.wikipedia.org/wiki/X-Forwarded-For) source of information. Like in this example:
+
+```apache
+#
+# Initiate IP address tracking
+#
+SecRule REQUEST_HEADERS:X-Forwarded-For ,?([.0-9]*)$ \
+  "id:1,\
+  phase:1,\
+  nolog,\
+  pass,\
+  t:none,\
+  capture,\
+  initcol:IP=%{TX.1}"
+```
